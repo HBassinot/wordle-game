@@ -94,3 +94,40 @@
   background-color: gray;
   color: white;
 }
+
+
+
+.wordle-footer {
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+	position: fixed;
+  left:0;
+  bottom:0px;
+  right:0;
+}
+
+#wordle-footer-hb {
+	 width: 16px;
+}
+
+.navbar-cl {
+  background-color: #825;
+}
+
+.wordle-body {
+  padding: 20px;
+}
+
+.app-container {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+Header, Footer {
+  grid-row: 1 / -1;
+}
+
+.app-container > WordleGame {
+  flex-grow: 1;
+}

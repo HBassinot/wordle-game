@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 const WordleGame = () => {
+  const wordLength = 5;
+  const maxTry = 6;
+
   const [guess, setGuess] = useState("");
   const [targetWord, setTargetWord] = useState("");
   const [isGameOver, setIsGameOver] = useState(false);
   const [isGameWon, setIsGameWon] = useState(false);
-  const [guessesLeft, setGuessesLeft] = useState(6);
+  const [guessesLeft, setGuessesLeft] = useState(maxTry);
   const [correctPositions, setCorrectPositions] = useState([]);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wordHistory, setWordHistory] = useState([]);
@@ -21,7 +24,7 @@ const WordleGame = () => {
       .then((response) => response.text())
       .then((data) => {
         const words = data.split("\n");
-        const filteredWords = words.filter((word) => word.length === 5);
+        const filteredWords = words.filter((word) => word.length === wordLength);
         const randomIndex = Math.floor(Math.random() * filteredWords.length);
         const randomWord = filteredWords[randomIndex];
         setTargetWord(randomWord);
@@ -31,18 +34,15 @@ const WordleGame = () => {
       });
   };
 
-  const checkValidWord = (word) => {
+  const checkValidWord  = (word) =>  {
     fetch("/dictionary.txt")
       .then((response) => response.text())
       .then((data) => {
         const words = data.split("\n");
         const isValid = words.includes(word.toUpperCase());
+        alert(isValid + " ==== " + word);
         setIsValidWord(isValid);
-        if (!isValid) {
-          setErrorMessage("Le mot proposé n'est pas valide.");
-        } else {
-          setErrorMessage("");
-        }
+
       })
       .catch((error) => {
         console.error("Error loading dictionary:", error);
@@ -61,16 +61,19 @@ const WordleGame = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (guess.length !== 5) {
+    if (guess.length !== wordLength) {
       setIsValidWord(false);
-      setErrorMessage("Le mot proposé doit avoir 5 lettres.");
+      setErrorMessage("Le mot proposé doit avoir " + wordLength +" lettres.");
       return;
     }
-
-    checkValidWord(guess);
-
+ 
+    checkValidWord(guess)
     if (!isValidWord) {
-      return;
+      setIsValidWord(false);
+      setErrorMessage("Le mot proposé n'est pas valide.");
+      return
+    } else {
+      setErrorMessage("");
     }
 
     const guessArray = guess.toUpperCase().split("");
@@ -113,17 +116,18 @@ const WordleGame = () => {
       setIsGameOver(true);
     } else {
       setGuess("");
-      setGuessesLeft(guessesLeft - 1);
       setCorrectPositions(positions);
       setCorrectLetters(letters);
     }
+    setGuessesLeft(guessesLeft - 1);
+    
   };
 
   const handleReset = () => {
     setGuess("");
     setIsGameOver(false);
     setIsGameWon(false);
-    setGuessesLeft(6);
+    setGuessesLeft(maxTry);
     setCorrectPositions([]);
     setCorrectLetters([]);
     setWordHistory([]);
@@ -158,20 +162,20 @@ const WordleGame = () => {
   };
 
   return (
-    <div>
-      <h1>Wordle</h1>
+    <div className="wordle-body">
+      <h2>Devinez le mot de {wordLength} lettres</h2>
+      <p>Tentatives restantes: {guessesLeft}</p>
       {!isGameOver && (
         <form onSubmit={handleSubmit}>
           <label>
-            Guess:
             <input
               type="text"
               value={guess}
-              maxLength={5}
+              maxLength={wordLength}
               onChange={(event) => setGuess(event.target.value)}
             />
           </label>
-          <button type="submit">Submit</button>
+          <button type="submit">Valider</button>
           {errorMessage && <p>{errorMessage}</p>}
         </form>
       )}
@@ -179,18 +183,18 @@ const WordleGame = () => {
       {isGameOver && (
         <div>
           {isGameWon ? (
-            <h2>You won!</h2>
+            <h3>BRAVO!</h3>
           ) : (
-            <h2>You lost! The word was {targetWord}</h2>
+            <h3>PERDU! Le mot était : {targetWord}</h3>
           )}
           <button onClick={handleReset}>Play Again</button>
         </div>
       )}
 
-      <p>Guesses left: {guessesLeft}</p>
+      
 
       <div className="word-history">
-        <h3>Word History:</h3>
+        <h3>Mots proposés:</h3>
         <div className="word-grid">
           {wordHistory.map((wordEntry, index) =>
             renderWord(wordEntry, index)
