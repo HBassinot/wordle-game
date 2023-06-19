@@ -34,13 +34,12 @@ const WordleGame = () => {
       });
   };
 
-  const checkValidWord  = (word) =>  {
+  const checkValidWord = (word) =>  {
     fetch("/dictionary.txt")
       .then((response) => response.text())
       .then((data) => {
         const words = data.split("\n");
         const isValid = words.includes(word.toUpperCase());
-        alert(isValid + " ==== " + word);
         setIsValidWord(isValid);
 
       })
