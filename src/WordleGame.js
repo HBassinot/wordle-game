@@ -21,7 +21,7 @@ const WordleGame = () => {
 
   useEffect(() => {
     generateTargetWord();
-  }, [isValidWord]);
+  }, []);
 
   useEffect(() => {
     if (guess.length === wordLength) {
