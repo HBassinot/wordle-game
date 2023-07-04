@@ -1,30 +1,26 @@
-import React, { Component } from 'react';
-import { Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import React, { useState } from 'react';
+import { Navbar, NavbarBrand } from 'reactstrap';
+import ConfigModal from './ConfigModal'; 
 
-export default class Header extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { isOpen: false };
-		this.toggle = this.toggle.bind(this);
-	}
+const Header = () => {
+  const [isOpen, setIsOpen] = useState(false);
 
-	toggle() {
-		this.setState({
-			isOpen: !this.state.isOpen
-		});
-	}
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
 
-	render() {
-		return <Navbar className="navbar-cl" expand="md">
-			<NavbarBrand href="/"><h1>Mon Wordle</h1></NavbarBrand>
-			<NavbarToggler onClick={this.toggle} />
-			<Collapse isOpen={this.state.isOpen} navbar>
-				<Nav className="ml-auto" navbar>
-					<NavItem>
-						<NavLink href="/config">Config</NavLink>
-					</NavItem>
-				</Nav>
-			</Collapse>
-		</Navbar>;
-	}
-}
+  return (
+    <Navbar className="navbar-cl" expand="md">
+      <NavbarBrand href="/"><h1>Mon Wordle</h1></NavbarBrand>
+        <div>
+          <a href="#" onClick={toggleModal}>Config</a>
+        </div>
+        <ConfigModal 
+          isOpen={isOpen}
+          toggleModal={toggleModal}
+        />
+    </Navbar>
+  );
+};
+
+export default Header;

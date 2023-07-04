@@ -17,3 +17,11 @@ code {
 h1 {
   color: whitesmoke;
 }
+
+a {
+  color: whitesmoke;
+}
+
+a:hover {
+  color: rgb(185, 183, 183);
+}

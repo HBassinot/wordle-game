@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import UserContext from "./store/user-context";
 
 const WordleGame = () => {
-  const wordLength = 5;
-  const maxTry = 6;
+  const userCtx = useContext(UserContext);
+  const score = userCtx.score;
+
+  const [wordLength, setWordLength] = useState(userCtx.userWordLength);
+  const [guessesLeft, setGuessesLeft] = useState(userCtx.userMaxTry);
 
   const [guess, setGuess] = useState("");
   const [targetWord, setTargetWord] = useState("");
   const [isGameOver, setIsGameOver] = useState(false);
   const [isGameWon, setIsGameWon] = useState(false);
-  const [guessesLeft, setGuessesLeft] = useState(maxTry);
+
   const [correctPositions, setCorrectPositions] = useState([]);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wordHistory, setWordHistory] = useState([]);
@@ -17,35 +21,44 @@ const WordleGame = () => {
 
   useEffect(() => {
     generateTargetWord();
-  }, []);
+  }, [isValidWord]);
 
-  const generateTargetWord = () => {
-    fetch("/dictionary.txt")
-      .then((response) => response.text())
-      .then((data) => {
-        const words = data.split("\n");
-        const filteredWords = words.filter((word) => word.length === wordLength);
-        const randomIndex = Math.floor(Math.random() * filteredWords.length);
-        const randomWord = filteredWords[randomIndex];
-        setTargetWord(randomWord);
-      })
-      .catch((error) => {
-        console.error("Error loading dictionary:", error);
-      });
+  useEffect(() => {
+    if (guess.length === wordLength) {
+      setErrorMessage("");
+    }
+  }, [guess, wordLength, isValidWord]);
+
+  const generateTargetWord = async () => {
+    try {
+      const response = await fetch("/dictionary.txt");
+      const data = await response.text();
+      const words = data.split("\n");
+      const filteredWords = words.filter((word) => word.length == wordLength);
+      const randomIndex = Math.floor(Math.random() * filteredWords.length);
+      const randomWord = filteredWords[randomIndex];
+      console.log("randomWord="+randomWord);
+      setTargetWord(randomWord);
+    } catch (error) {
+      console.error("Error loading dictionary:", error);
+    }
   };
 
-  const checkValidWord = (word) =>  {
-    fetch("/dictionary.txt")
-      .then((response) => response.text())
-      .then((data) => {
-        const words = data.split("\n");
-        const isValid = words.includes(word.toUpperCase());
-        setIsValidWord(isValid);
+  const isWordInArray = (word, array) => {
+    const lowercaseWord = word.toLowerCase();
+    return array.some((item) => item.toLowerCase() === lowercaseWord);
+  };
 
-      })
-      .catch((error) => {
-        console.error("Error loading dictionary:", error);
-      });
+  const checkValidWord = async (word) => {
+    try {
+      const response = await fetch("/dictionary.txt");
+      const data = await response.text();
+      const words = data.split("\n");
+      const isValid = isWordInArray(word, words);
+      setIsValidWord(isValid);
+    } catch (error) {
+      console.error("Error loading dictionary:", error);
+    }
   };
 
   const countLetterOccurrences = (word) => {
@@ -60,23 +73,24 @@ const WordleGame = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (guess.length !== wordLength) {
+    if (guess.length != wordLength) {
       setIsValidWord(false);
-      setErrorMessage("Le mot proposé doit avoir " + wordLength +" lettres.");
+      setErrorMessage(`Le mot proposé doit avoir ${wordLength} lettres.`);
       return;
     }
- 
-    checkValidWord(guess)
+
+    checkValidWord(guess);
     if (!isValidWord) {
-      setIsValidWord(false);
-      setErrorMessage("Le mot proposé n'est pas valide.");
-      return
+      setErrorMessage(`Le mot '${guess}' n'est pas un mot valide.`);
+      return;
     } else {
       setErrorMessage("");
     }
 
+    
     const guessArray = guess.toUpperCase().split("");
     const targetArray = targetWord.toUpperCase().split("");
+    
     const positions = [];
     const letters = [];
     const guessOccurrences = countLetterOccurrences(guessArray);
@@ -114,19 +128,19 @@ const WordleGame = () => {
     } else if (guessesLeft === 1) {
       setIsGameOver(true);
     } else {
-      setGuess("");
+      
       setCorrectPositions(positions);
       setCorrectLetters(letters);
     }
-    setGuessesLeft(guessesLeft - 1);
-    
+    setGuessesLeft((prevGuessesLeft) => prevGuessesLeft - 1);
+    setGuess("");
   };
 
   const handleReset = () => {
     setGuess("");
     setIsGameOver(false);
     setIsGameWon(false);
-    setGuessesLeft(maxTry);
+    setGuessesLeft(userCtx.userMaxTry);
     setCorrectPositions([]);
     setCorrectLetters([]);
     setWordHistory([]);
@@ -163,7 +177,8 @@ const WordleGame = () => {
   return (
     <div className="wordle-body">
       <h2>Devinez le mot de {wordLength} lettres</h2>
-      <p>Tentatives restantes: {guessesLeft}</p>
+
+      <p>Tentatives restantes : {guessesLeft}</p>
       {!isGameOver && (
         <form onSubmit={handleSubmit}>
           <label>
@@ -182,18 +197,16 @@ const WordleGame = () => {
       {isGameOver && (
         <div>
           {isGameWon ? (
-            <h3>BRAVO!</h3>
+            <h3>BRAVO !</h3>
           ) : (
-            <h3>PERDU! Le mot était : {targetWord}</h3>
+            <h3>PERDU ! Le mot était : {targetWord}</h3>
           )}
-          <button onClick={handleReset}>Play Again</button>
+          <button onClick={handleReset}>Rejouer</button>
         </div>
       )}
 
-      
-
       <div className="word-history">
-        <h3>Mots proposés:</h3>
+        <h3>Mots proposés :</h3>
         <div className="word-grid">
           {wordHistory.map((wordEntry, index) =>
             renderWord(wordEntry, index)
