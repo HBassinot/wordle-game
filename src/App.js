@@ -1,7 +1,10 @@
 import React from "react";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import WordleGame from "./WordleGame";
 import Header from "./Header";
 import Footer from "./Footer";
+import Error404 from "./Error404";
+
 import { UserContextProvider } from "./store/UserContext";
 import { DictionaryProvider } from "./store/Dictionary"; 
 
@@ -13,7 +16,14 @@ const App = () => {
       <UserContextProvider>
         <Header />
         <DictionaryProvider>
-          <WordleGame />
+
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<WordleGame/>} />
+              <Route path="*" element={<Error404/>} />
+            </Routes>
+          </BrowserRouter>
+
         </DictionaryProvider>
         <Footer />
       </UserContextProvider>
