@@ -2,7 +2,8 @@ import React from "react";
 import WordleGame from "./WordleGame";
 import Header from "./Header";
 import Footer from "./Footer";
-import { UserContextProvider } from "./store/user-context";
+import { UserContextProvider } from "./store/UserContext";
+import { DictionaryProvider } from "./store/Dictionary"; 
 
 import './App.css';
 
@@ -11,7 +12,9 @@ const App = () => {
     <div className="app-container">
       <UserContextProvider>
         <Header />
-        <WordleGame />
+        <DictionaryProvider>
+          <WordleGame />
+        </DictionaryProvider>
         <Footer />
       </UserContextProvider>
     </div>

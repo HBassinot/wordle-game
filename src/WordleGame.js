@@ -1,40 +1,48 @@
 import React, { useState, useEffect, useContext } from "react";
-import UserContext from "./store/user-context";
+import UserContext from "./store/UserContext";
+import DictionaryContext from "./store/Dictionary";
 
 const WordleGame = () => {
   const userCtx = useContext(UserContext);
-  const score = userCtx.score;
+  const dictionaryCtx = useContext(DictionaryContext); 
 
   const [wordLength, setWordLength] = useState(userCtx.userWordLength);
+  const [score, setScore] = useState(userCtx.score);
   const [guessesLeft, setGuessesLeft] = useState(userCtx.userMaxTry);
+
+  const dictionary = dictionaryCtx.wordList;
+  const isLoading = dictionaryCtx.isLoading;
 
   const [guess, setGuess] = useState("");
   const [targetWord, setTargetWord] = useState("");
   const [isGameOver, setIsGameOver] = useState(false);
   const [isGameWon, setIsGameWon] = useState(false);
-
   const [correctPositions, setCorrectPositions] = useState([]);
   const [correctLetters, setCorrectLetters] = useState([]);
   const [wordHistory, setWordHistory] = useState([]);
-  const [isValidWord, setIsValidWord] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    generateTargetWord();
-  }, []);
+    if(!isLoading) {
+      generateTargetWord();
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     if (guess.length === wordLength) {
       setErrorMessage("");
     }
-  }, [guess, wordLength, isValidWord]);
+  }, [guess, wordLength]);
 
-  const generateTargetWord = async () => {
+
+  const generateTargetWord = () => {
     try {
-      const response = await fetch("/dictionary.txt");
-      const data = await response.text();
-      const words = data.split("\n");
-      const filteredWords = words.filter((word) => word.length == wordLength);
+      if (!dictionary) {
+        console.error("Dictionary is undefined");
+        return;
+      }
+
+      const filteredWords = dictionary.filter((word) => word.length == wordLength);
       const randomIndex = Math.floor(Math.random() * filteredWords.length);
       const randomWord = filteredWords[randomIndex];
       console.log("randomWord="+randomWord);
@@ -49,16 +57,14 @@ const WordleGame = () => {
     return array.some((item) => item.toLowerCase() === lowercaseWord);
   };
 
-  const checkValidWord = async (word) => {
+  function checkValidWord(word) {
     try {
-      const response = await fetch("/dictionary.txt");
-      const data = await response.text();
-      const words = data.split("\n");
-      const isValid = isWordInArray(word, words);
-      setIsValidWord(isValid);
+      const isValid = isWordInArray(word, dictionary);
+      return isValid;
     } catch (error) {
       console.error("Error loading dictionary:", error);
     }
+    return false;
   };
 
   const countLetterOccurrences = (word) => {
@@ -74,13 +80,11 @@ const WordleGame = () => {
     event.preventDefault();
 
     if (guess.length != wordLength) {
-      setIsValidWord(false);
       setErrorMessage(`Le mot proposé doit avoir ${wordLength} lettres.`);
       return;
     }
 
-    checkValidWord(guess);
-    if (!isValidWord) {
+    if (!checkValidWord(guess)) {
       setErrorMessage(`Le mot '${guess}' n'est pas un mot valide.`);
       return;
     } else {
@@ -149,6 +153,12 @@ const WordleGame = () => {
   };
 
   const renderWord = (wordEntry, index) => {
+
+    if (isLoading) {
+      return <p>Chargement en cours...</p>;
+    }
+
+    
     const wordArray = wordEntry.word.toUpperCase().split("");
 
     return (

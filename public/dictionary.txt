@@ -14570,6 +14570,7 @@ niais
 niant
 Nicaragua
 Nice
+niche
 nicher
 nichons
 nickel
@@ -19072,7 +19073,7 @@ royal
 royale
 royaume
 royaute
-ru
+icone
 ruban
 rubicond
 rubrique

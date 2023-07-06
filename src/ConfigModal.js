@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect} from 'react';
 import Modal from 'react-modal';
-import UserContext, {WORD_LENGTH_MIN, WORD_LENGTH_MAX} from "./store/user-context";
+import UserContext, {WORD_LENGTH_MIN, WORD_LENGTH_MAX} from "./store/UserContext";
 
 
 Modal.setAppElement('#root'); // Assurez-vous d'ajouter cette ligne
