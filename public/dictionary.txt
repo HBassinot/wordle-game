@@ -19735,13 +19735,11 @@ socialistes
 sociaux
 societe
 societes
-socio-economique
 sociologie
 sociologique
 sociologiques
 sociologue
 sociologues
-socio-politique
 socle
 sodium
 sOEur
@@ -19752,14 +19750,12 @@ Sofia
 Sofres
 software
 soi
-soi-disant
 soie
 soient
 soif
 soigne
 soigner
 soigneusement
-soi-meme
 soin
 soins
 soir
@@ -20210,7 +20206,6 @@ style
 styles
 stylistique
 stylo
-su
 suant
 suave
 suavite
