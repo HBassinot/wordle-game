@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect} from 'react';
 import Modal from 'react-modal';
-import UserContext, {WORD_LENGTH_MIN, WORD_LENGTH_MAX} from "./store/UserContext";
+import UserContext, {WORD_LENGTH_MIN, WORD_LENGTH_MAX} from "../store/UserContext";
+import TitleModal from './TitleModal';
 
 
 Modal.setAppElement('#root'); // Assurez-vous d'ajouter cette ligne
@@ -45,22 +46,21 @@ const ConfigModal = ({ isOpen, toggleModal}) => {
       isOpen={isOpen}
       onRequestClose={toggleModal}
       contentLabel="Configuration"
-      className="modal-config"
+      className="modal-wordle"
       overlayClassName="modal-overlay "
     >
-      <h3>Configuration</h3>
+      <TitleModal title="Configuration" toggleModal={toggleModal} />
 
       <p>Longueur du mot à trouver :</p>
-      <input type="number" value={wordLength} onChange={handleWordLengthChange} />
+      <input className="inputField" type="number" value={wordLength} onChange={handleWordLengthChange} />
 
       <br></br><br></br>
 
       <p>Nombre de tentative :</p>
-      <input type="number" value={maxTry} onChange={handleMaxTryChange} />
+      <input className="inputField" type="number" value={maxTry} onChange={handleMaxTryChange} />
 
       <br></br><br></br>
 
-      <button onClick={toggleModal}>Fermer</button>
     </Modal>
   );
 };

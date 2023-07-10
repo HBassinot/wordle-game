@@ -8,6 +8,7 @@ const WordleGame = () => {
 
   const [wordLength, setWordLength] = useState(userCtx.userWordLength);
   const [score, setScore] = useState(userCtx.score);
+  const [currentGame, setCurrentGame] = useState(userCtx.userCurrentGame);
   const [guessesLeft, setGuessesLeft] = useState(userCtx.userMaxTry);
 
   const dictionary = dictionaryCtx.wordList;
@@ -23,15 +24,32 @@ const WordleGame = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    if(!isLoading) {
-      generateTargetWord();
+    if(currentGame.word === '') {
+      if(!isLoading) {
+        generateTargetWord();
+      }
+    } else {
+      setTargetWord(currentGame.word);
+      setWordHistory(currentGame.guesses);
+      setGuessesLeft(userCtx.userMaxTry - currentGame.guesses.length);
+
+      if(guessesLeft <= 0) {
+        setIsGameOver(true);
+      }
+
+      if(currentGame.guesses.some((objet) => objet.word.toLowerCase() === currentGame.word.toLowerCase())) {
+        setIsGameOver(true);
+        setIsGameWon(true);
+      }
     }
+
   }, [isLoading]);
 
   useEffect(() => {
     if (guess.length === wordLength) {
       setErrorMessage("");
     }
+
   }, [guess, wordLength]);
 
 
@@ -47,6 +65,11 @@ const WordleGame = () => {
       const randomWord = filteredWords[randomIndex];
       console.log("randomWord="+randomWord);
       setTargetWord(randomWord);
+
+      currentGame.word = randomWord;
+      currentGame.guesses = [];
+      userCtx.setUserCurrentGame(currentGame);
+
     } catch (error) {
       console.error("Error loading dictionary:", error);
     }
@@ -125,6 +148,9 @@ const WordleGame = () => {
 
     const updatedWordHistory = [...wordHistory, wordEntry];
     setWordHistory(updatedWordHistory);
+
+    currentGame.guesses.push(wordEntry);
+    userCtx.setUserCurrentGame(currentGame);
 
     if (positions.length === targetArray.length) {
       setIsGameOver(true);

@@ -16,6 +16,7 @@ code {
 
 h1 {
   color: whitesmoke;
+  margin-bottom: 0px;
 }
 
 a {
@@ -24,4 +25,10 @@ a {
 
 a:hover {
   color: rgb(185, 183, 183);
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 1.4em !important;
+  }
 }

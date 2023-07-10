@@ -11,13 +11,18 @@ export const WORD_LENGTH_MAX = 10;
 const DEFAULT_SCORE = 0;
 const KEY_SCORE = 'SCORE';
 
+const KEY_CURRENT_GAME = 'CURRENT_GAME';
+const DEFAULT_GAME = {word:'',guesses:[]};
+
 const UserContext = createContext({
   userWordLength: DEFAULT_WORD_LENGTH,
   userMaxTry: DEFAULT_MAX_TRY,
   userScore: DEFAULT_SCORE,
+  userCurrentGame: DEFAULT_GAME,
 
   setWordLength: () => { return; },
   setMaxTry: () => { return; },
+  setUserCurrentGame: () => { return; },
 });
 
 export function UserContextProvider(props) {
@@ -25,12 +30,16 @@ export function UserContextProvider(props) {
     userScore: getUserScore(),
     userWordLength: getUserWordLength(),
     userMaxTry: getUserMaxTry(),
+    userCurrentGame: getUserCurrentGame(),
 
     setWordLength: (value) => {
       setUserWordLength(value);
     },
     setMaxTry: (value) => {
       setUserMaxTry(value);
+    },
+    setUserCurrentGame: (value) => {
+      setUserCurrentGame(value);
     }
   };
 
@@ -40,6 +49,20 @@ export function UserContextProvider(props) {
 
   function setUserWordLength(value) {
     setValueLocalStorage(KEY_WORD_LENGTH, value);
+  }
+
+  function setUserCurrentGame(value) {
+    const gameJSON = JSON.stringify(value);
+    setValueLocalStorage(KEY_CURRENT_GAME, gameJSON);
+  }
+
+  function getUserCurrentGame() {
+    var gameJSON = getValueLocalStorage(KEY_CURRENT_GAME);
+    if (gameJSON) {
+      const savedGame = JSON.parse(gameJSON);
+      return savedGame;
+    }
+    return DEFAULT_GAME;
   }
 
   function getUserScore() {

@@ -13,6 +13,7 @@
   }
 }
 
+/**** HEADER CSS ****/
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -21,8 +22,41 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: whitesmoke;
 }
+
+.navbar-cl.navbar.navbar-expand-md {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+
+.bi-gear-fill {
+  margin-left: 5px;
+  position: relative;
+  top: -1px;
+}
+
+.wordleButton {
+  border-radius: 8px;
+  border: 0px;
+  font-size: medium;
+  text-align: justify;
+  background-color: #8d4d65;
+  margin: 2px;
+  color: whitesmoke;
+  margin-right: 3px;
+}
+
+.wordleButton:hover {
+  background-color: #503b43;
+}
+
+.navbar-brand {
+  padding-top: 0px!important;
+  padding-bottom:  0px!important;
+}
+/********/
 
 .App-link {
   color: #61dafb;
@@ -95,8 +129,6 @@
   color: white;
 }
 
-
-
 .wordle-footer {
 	padding-top: 0px !important;
 	padding-bottom: 0px !important;
@@ -107,7 +139,7 @@
 }
 
 #wordle-footer-hb {
-	 width: 16px;
+	 width: 20px;
 }
 
 .navbar-cl {
@@ -132,16 +164,73 @@ Header, Footer {
   flex-grow: 1;
 }
 
-.modal-config {
+.nav-item {
+  padding-left: 0px !important;
+}
+
+.nav-item:not(:last-child):after {
+  content: "|";
+  color: rgba(255,255,255,.5) !important;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.nav-link {
+  display: inline-block !important;
+  padding: 0px;
+}
+/*** MODALS ***/
+.modal-wordle {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
   z-index: 9999;
-  color: black;
+  background-color: rgb(33, 37, 41);
+  width: 50%;
+}
+
+.inputField {
+  width: 70%;
+}
+
+@media (max-width: 590px) {
+.modal-title-close {
+  display: none;
+}
+}
+@media (max-width: 500px) {
+  .wordleButtonTitle {
+    display: none;
+  }
+  .modal-wordle {
+    width: 90%;
+  }
+}
+@media (max-width: 600px) {
+  .wordleButtonTitle {
+    display: none;
+  }
+  .modal-wordle {
+    width: 80%;
+  }
+}
+
+.modal-title-text {
+  margin-right: 15px;
+}
+.modal-title {
+  background-color: #825;
+  padding-left: 10px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  color:  whitesmoke;;
+  margin: -10px;
+  margin-bottom: 12px !important;
+  position: relative;
+    display: flex;
 }
 
 .modal-overlay {
@@ -167,4 +256,9 @@ Header, Footer {
 
 .error404 {
   margin: auto;
+}
+
+/**** FOOTER */
+.navbar-nav {
+  flex-direction: unset!important;
 }

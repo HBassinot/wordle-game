@@ -17,12 +17,15 @@ class Footer extends React.Component {
 			<NavbarBrand target="_blank" href="https://www.hbassinot.com">{status}</NavbarBrand>
 			<Nav className=" ml-auto" navbar>
 				<NavItem>
-					<NavLink target="_blank" href="https://github.com/HBassinot/wordle-game">GitHub </NavLink>
+					<NavLink target="_blank" href="https://github.com/HBassinot/wordle-game">GitHub</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink>{year}</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink><img id="wordle-footer-hb" src={hb} alt="HB" /></NavLink>
 				</NavItem>
 			</Nav>
-			<NavbarText>
-				 - {year} - <img id="wordle-footer-hb" src={hb} alt="HB" />
-			</NavbarText>
 		</Navbar>;
 	}
 }

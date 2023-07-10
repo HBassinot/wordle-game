@@ -20553,7 +20553,6 @@ systematique
 systematiquement
 systeme
 systemes
-ta
 tabac
 tabasser
 table
@@ -20641,7 +20640,6 @@ tardive
 tardivement
 tardives
 tare
-tare
 tari
 tarif
 tarification
@@ -20693,7 +20691,6 @@ Tchecoslovaquie
 tcheque
 tcheques
 Tchernobyl
-te
 technicien
 techniciens
 technicite
@@ -21334,7 +21331,6 @@ trembler
 trembloter
 tremie
 trempe
-trempe
 tremper
 trempette
 tremplin
@@ -21406,7 +21402,6 @@ trois-mats
 trolley
 trolleybus
 trombe
-trompe
 trompe
 tromper
 tromperie
@@ -21519,7 +21514,6 @@ typographie
 typographique
 tyran
 tyrannie
-U.S.A.
 ukase
 Ukraine
 ukrainien
@@ -21539,7 +21533,6 @@ ultimes
 ultimo
 ultra
 Ultra
-un
 unanime
 unanimement
 unanimes
@@ -21636,7 +21629,6 @@ utilitariste
 utilite
 utopie
 utopique
-va
 vacances
 vacanciers
 vacant
@@ -22242,7 +22234,6 @@ vraisemblable
 vraisemblablement
 vraisemblance
 Vranitzky
-vu
 vue
 vues
 vulgaire
